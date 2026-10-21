@@ -6,3 +6,6 @@ for trying out GitHub features
 - bring Dev branch to Codespace
 - 21.10.: create feature branch on Codespace / Win device in Browser
 - work on feature branch on Codespace / CB
+- can I see changes from Win device instantly?
+yes I can, that's pretty cool
+Edit wars enabled!
