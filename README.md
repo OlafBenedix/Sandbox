@@ -9,3 +9,4 @@ for trying out GitHub features
 - can I see changes from Win device instantly?
 yes I can, that's pretty cool
 Edit wars enabled!
+- merging into local Dev without pull request...?
