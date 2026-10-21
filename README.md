@@ -10,3 +10,5 @@ for trying out GitHub features
 yes I can, that's pretty cool
 Edit wars enabled!
 - merging into local Dev without pull request...?
+not sure that's a good thing, but technically possible.
+staging changes partially also works as expected
