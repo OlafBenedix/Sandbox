@@ -12,3 +12,6 @@ Edit wars enabled!
 - merging into local Dev without pull request...?
 not sure that's a good thing, but technically possible.
 staging changes partially also works as expected
+- the browser GUI allows for empty commit messages :(
+- GitHub Desktop is only the version control tool, not for editing (use suitable editor or better yet VSCode)
+- committing via local Repo / Win device / desktop app
