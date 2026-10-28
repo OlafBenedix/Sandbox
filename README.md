@@ -5,6 +5,7 @@ for trying out GitHub features
 - origin/Dev branch 19.10. on (T)
 - bring Dev branch to Codespace
 - 21.10.: create feature branch on Codespace / Win device in Browser
+-- needs physical keyboard though? tablet (virtual) keyboard's enter key is not accepted in branch creation input box
 - work on feature branch on Codespace / CB
 - can I see changes from Win device instantly?
 yes I can, that's pretty cool
