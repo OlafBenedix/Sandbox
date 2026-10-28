@@ -6,6 +6,7 @@ for trying out GitHub features
 - bring Dev branch to Codespace
 - 21.10.: create feature branch on Codespace / Win device in Browser
 -- needs physical keyboard though? tablet (virtual) keyboard's enter key is not accepted in branch creation input box
+- work on feature3b branch which is a way better branch than 3a on Codespace / CB
 - work on feature3a branch which is the best branch ever on Codespace / CB
 - can I see changes from Win device instantly?
 yes I can, that's pretty cool
@@ -13,8 +14,9 @@ Edit wars enabled!
 - merging into local Dev without pull request?
 not sure that's a good thing, but technically possible.
 staging changes partially also works as expected
-- GitHub Desktop is only the version control tool, not for editing (use suitable editor or better yet VSCode)
-- committing via local Repo / Win device / desktop app
-- here test3a branch is trying to mess with your file
-
 - the browser GUI allows for empty commit messages :(
+
+- committing via local Repo / Win device / desktop app
+- can I add additional info in the resolving conflict box?
+
+- GitHub Desktop is merely the version control tool, not for editing (use suitable editor or better yet VSCode)
