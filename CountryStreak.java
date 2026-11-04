@@ -1,9 +1,22 @@
 import java.util.ArrayList;
 
+enum StatType {
+  MEDIAN,
+  MEAN,
+  LONGEST,
+  CURRENT
+}
+
 public class CountryStreak {
   static String guessesAsDumbString;
   static ArrayList<Double> timeLineSuccessRate = new ArrayList<Double>();
   static ArrayList<Integer> seriesOfStreaks = new ArrayList<Integer>();
+
+  static double getGuessingStats(StatType type)
+  {
+
+    return -1;
+  }
 
   static double successRateOfDumbString(String s)
   {
@@ -66,5 +79,12 @@ public class CountryStreak {
     inferSeriesOfStreaks();
     System.out.println("you had the following streaks:");
     System.out.println(seriesOfStreaks);
+    System.out.println("your longest streak was:");
+    System.out.println(getGuessingStats(StatType.LONGEST));
+    System.out.println("your streak average was:");
+    System.out.println(getGuessingStats(StatType.MEAN));
+    System.out.println("your median streak was:");
+    System.out.println(getGuessingStats(StatType.MEDIAN));
+
   }
 }
