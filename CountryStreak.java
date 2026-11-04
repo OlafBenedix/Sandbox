@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+//import org.apache.commons.statistics.variance;
 
 enum StatType {
   MEDIAN,
@@ -14,7 +15,17 @@ public class CountryStreak {
 
   static double getGuessingStats(StatType type)
   {
-
+    inferSeriesOfStreaks();
+    switch(type){
+      case StatType.LONGEST: 
+      {
+        int best = 0;
+        for( int i=0; i<seriesOfStreaks.size(); i++ )
+          if ( seriesOfStreaks.get(i).intValue() > best )
+            best = seriesOfStreaks.get(i).intValue();
+        return best;
+      }
+    }
     return -1;
   }
 
@@ -80,7 +91,7 @@ public class CountryStreak {
     System.out.println("you had the following streaks:");
     System.out.println(seriesOfStreaks);
     System.out.println("your longest streak was:");
-    System.out.println(getGuessingStats(StatType.LONGEST));
+    System.out.println((int)getGuessingStats(StatType.LONGEST));
     System.out.println("your streak average was:");
     System.out.println(getGuessingStats(StatType.MEAN));
     System.out.println("your median streak was:");
