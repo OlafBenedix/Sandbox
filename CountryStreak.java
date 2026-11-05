@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 //import org.apache.commons.statistics.variance;
+import java.util.List;
 
 enum StatType {
   MEDIAN,
@@ -16,24 +17,25 @@ public class CountryStreak {
   static double getGuessingStats(StatType type)
   {
     inferSeriesOfStreaks();
-    switch(type){
+
+    switch(type)
+    {
       case StatType.LONGEST: 
-      {
         int best = 0;
         for( int i=0; i<seriesOfStreaks.size(); i++ )
           if ( seriesOfStreaks.get(i).intValue() > best )
             best = seriesOfStreaks.get(i).intValue();
         return best;
-      }
+
       case StatType.CURRENT:
-        {
           if (guessesAsDumbString.endsWith("1") || guessesAsDumbString.endsWith("*"))
             return seriesOfStreaks.getLast().intValue();
           else
             return 0;
-        }
+
+      default:
+          return -1;
     }
-    return -1;
   }
 
   static double successRateOfDumbString(String s)
@@ -105,6 +107,5 @@ public class CountryStreak {
     System.out.println(getGuessingStats(StatType.MEDIAN));
     System.out.println("your current streak is at:");
     System.out.println(getGuessingStats(StatType.CURRENT));
-
   }
 }
