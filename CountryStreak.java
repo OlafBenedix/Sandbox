@@ -25,6 +25,13 @@ public class CountryStreak {
             best = seriesOfStreaks.get(i).intValue();
         return best;
       }
+      case StatType.CURRENT:
+        {
+          if (guessesAsDumbString.endsWith("1") || guessesAsDumbString.endsWith("*"))
+            return seriesOfStreaks.getLast().intValue();
+          else
+            return 0;
+        }
     }
     return -1;
   }
@@ -81,7 +88,7 @@ public class CountryStreak {
   }
 
   public static void main(String[] args) {
-    guessesAsDumbString = "10010***?1";
+    guessesAsDumbString = "10010***1?";
     System.out.println("Your country streak is: " + guessesAsDumbString);
     System.out.println("Your success rate is: " + successRateOfDumbString(guessesAsDumbString));
     inferPartialSuccessRates(5);
@@ -96,6 +103,8 @@ public class CountryStreak {
     System.out.println(getGuessingStats(StatType.MEAN));
     System.out.println("your median streak was:");
     System.out.println(getGuessingStats(StatType.MEDIAN));
+    System.out.println("your current streak is at:");
+    System.out.println(getGuessingStats(StatType.CURRENT));
 
   }
 }
