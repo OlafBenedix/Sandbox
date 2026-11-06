@@ -1,9 +1,9 @@
-import java.util.Date;
+import java.time.*;
 
 public class SingleGuess {
     int guessID = 0;
     boolean success = false;
-//    LocalDate guessDate;
+    LocalDate guessDate;
 //    LocalDateTime guessTimeStamp;
     //country
     //points

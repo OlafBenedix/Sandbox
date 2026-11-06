@@ -1,6 +1,4 @@
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.ArrayList;
 //import org.apache.commons.statistics.variance;
 import java.util.List;
@@ -102,6 +100,7 @@ public class CountryStreak {
     System.out.println("in chunks of 5 guesses, your success rate developed as follows:");
     System.out.println(timeLineSuccessRate);
     System.out.println("you had the following streaks:");
+    inferSeriesOfStreaks();
     System.out.println(seriesOfStreaks);
     System.out.println("your longest streak was:");
     System.out.println((int)getGuessingStats(StatType.LONGEST));
@@ -113,15 +112,28 @@ public class CountryStreak {
     System.out.println(getGuessingStats(StatType.CURRENT));
   }
 
+  static void addGuess()
+  {
+    String guessInput = new java.util.Scanner(System.in).next();
+    System.out.println("input was read as " + guessInput);
+    SingleGuess g = new SingleGuess();
+    g.guessDate = LocalDate.now();
+    g.success = guessInput.contentEquals("*") || guessInput.contentEquals("1") || guessInput.contentEquals("y")
+                ? true : false;
+    guessesAsDumbString += g.success ? '*' : '0';
+    System.out.println("Your guess was registered as '"
+                        + g.success + "' on "
+                        + g.guessDate);
+  }
+
   public static void main(String[] args) {
     int state = 0;
 
     guessesAsDumbString = "10010***1?";
-    inferSeriesOfStreaks();
 
     do
     {
-      System.out.println("1 - show stats, else - end");
+      System.out.println("1 - show stats, 2 - add guess, else - end");
       state = new java.util.Scanner(System.in).nextInt();
       switch (state)
       {
@@ -129,12 +141,16 @@ public class CountryStreak {
           System.out.println(" --- showing stats ---");
           showStats();
           break; 
+        case 2:
+          System.out.println(" --- add a guess ---\n successful? (1,*,y if yes)");
+          addGuess();
+          break;
         default: state = 0;
       }
     }
     while (state > 0);
     System.out.println(" --- bye ---");
-  
+/*  
     LocalDate t1 = LocalDate.now();
     LocalDateTime t2 = LocalDateTime.now();
     LocalTime t3 = LocalTime.now();
@@ -147,6 +163,6 @@ public class CountryStreak {
       System.out.println("yay");
     else
       System.out.println("boo");
-      
+  */    
   }
 }
