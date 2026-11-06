@@ -1,7 +1,11 @@
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 //import org.apache.commons.statistics.variance;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Date;
 
 enum StatType {
   MEDIAN,
@@ -130,5 +134,19 @@ public class CountryStreak {
     }
     while (state > 0);
     System.out.println(" --- bye ---");
+  
+    LocalDate t1 = LocalDate.now();
+    LocalDateTime t2 = LocalDateTime.now();
+    LocalTime t3 = LocalTime.now();
+    System.out.println(t1+"\n"+t2+"\n"+t3);
+
+    SingleGuess g = new SingleGuess();
+    System.out.println(g.toString());
+    g.success = true;
+    if (g.success == true)
+      System.out.println("yay");
+    else
+      System.out.println("boo");
+      
   }
 }
