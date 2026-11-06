@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 //import org.apache.commons.statistics.variance;
 import java.util.List;
+import java.util.Scanner;
 
 enum StatType {
   MEDIAN,
@@ -89,14 +90,13 @@ public class CountryStreak {
       seriesOfStreaks.add(currentStreak);
   }
 
-  public static void main(String[] args) {
-    guessesAsDumbString = "10010***1?";
+  static void showStats()
+  {
     System.out.println("Your country streak is: " + guessesAsDumbString);
     System.out.println("Your success rate is: " + successRateOfDumbString(guessesAsDumbString));
     inferPartialSuccessRates(5);
     System.out.println("in chunks of 5 guesses, your success rate developed as follows:");
     System.out.println(timeLineSuccessRate);
-    inferSeriesOfStreaks();
     System.out.println("you had the following streaks:");
     System.out.println(seriesOfStreaks);
     System.out.println("your longest streak was:");
@@ -107,5 +107,28 @@ public class CountryStreak {
     System.out.println(getGuessingStats(StatType.MEDIAN));
     System.out.println("your current streak is at:");
     System.out.println(getGuessingStats(StatType.CURRENT));
+  }
+
+  public static void main(String[] args) {
+    int state = 0;
+
+    guessesAsDumbString = "10010***1?";
+    inferSeriesOfStreaks();
+
+    do
+    {
+      System.out.println("1 - show stats, else - end");
+      state = new java.util.Scanner(System.in).nextInt();
+      switch (state)
+      {
+        case 1:
+          System.out.println(" --- showing stats ---");
+          showStats();
+          break; 
+        default: state = 0;
+      }
+    }
+    while (state > 0);
+    System.out.println(" --- bye ---");
   }
 }
