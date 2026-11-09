@@ -1,9 +1,9 @@
 import java.time.*;
+import java.time.format.*;
 import java.util.ArrayList;
 //import org.apache.commons.statistics.variance;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Date;
 
 enum StatType {
   MEDIAN,
@@ -29,13 +29,11 @@ public class CountryStreak {
           if ( seriesOfStreaks.get(i).intValue() > best )
             best = seriesOfStreaks.get(i).intValue();
         return best;
-
       case StatType.CURRENT:
           if (guessesAsDumbString.endsWith("1") || guessesAsDumbString.endsWith("*"))
             return seriesOfStreaks.getLast().intValue();
           else
             return 0;
-
       default:
           return -1;
     }
@@ -121,9 +119,11 @@ public class CountryStreak {
     g.success = guessInput.contentEquals("*") || guessInput.contentEquals("1") || guessInput.contentEquals("y")
                 ? true : false;
     guessesAsDumbString += g.success ? '*' : '0';
+
+    DateTimeFormatter formatAtGuessCreation = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     System.out.println("Your guess was registered as '"
                         + g.success + "' on "
-                        + g.guessDate);
+                        + g.guessDate.format(formatAtGuessCreation));
   }
 
   public static void main(String[] args) {
@@ -149,20 +149,6 @@ public class CountryStreak {
       }
     }
     while (state > 0);
-    System.out.println(" --- bye ---");
-/*  
-    LocalDate t1 = LocalDate.now();
-    LocalDateTime t2 = LocalDateTime.now();
-    LocalTime t3 = LocalTime.now();
-    System.out.println(t1+"\n"+t2+"\n"+t3);
-
-    SingleGuess g = new SingleGuess();
-    System.out.println(g.toString());
-    g.success = true;
-    if (g.success == true)
-      System.out.println("yay");
-    else
-      System.out.println("boo");
-  */    
+    System.out.println(" --- bye ---");   
   }
 }
