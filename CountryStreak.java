@@ -3,8 +3,7 @@ import java.time.format.*;
 import java.util.ArrayList;
 //import org.apache.commons.statistics.variance;
 import java.util.Scanner;
-import java.util.regex;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 enum StatType {
   MEDIAN,
@@ -52,19 +51,27 @@ public class CountryStreak {
     boolean matchFound;
     Matcher matcher;
 
-    //test for permitted characters
+    //test for permitted characters, only *, ?, digits allowed
     Pattern pattern1 = Pattern.compile("[^\\?\\*[0-9]]");
     matcher = pattern1.matcher(checkOn);
     matchFound = matcher.find();
     if(matchFound)
-    {
-      IO.println("complaint!");
       return false;
-    }
-    else
-      IO.println("no ineligible characters found");
 
     testResult = testResult && !(matchFound);
+
+    //test for last character, may not be a digit
+    boolean testLastChar = checkOn.endsWith("*") || checkOn.endsWith("?");
+
+    testResult = testResult && testLastChar;
+
+    //test: numbers should not start with digit 0
+    boolean testZeroStart = ! checkOn.startsWith("0")
+                         && ! Pattern.compile("\\*0").matcher(checkOn).find()
+                         && ! Pattern.compile("\\?0").matcher(checkOn).find();
+    IO.println("TestZeroStart ist " + testZeroStart);
+
+    testResult = testResult && testZeroStart;
 
     //test for...
 
@@ -155,12 +162,14 @@ public class CountryStreak {
 
     //Input Data
     guessesAsDumbString = "10?10***1?";
-    String guessesAsCompressedString = "*?3*??2*";
+    String guessesAsCompressedString = "*?3*2*??2*";
 
     //stuff for debugging regex search
-    String drx = "[^\\?\\*[0-9]]";
-    IO.println("passed pattern string:");
-    IO.println(drx);
+//    String drx = "[^\\?\\*[0-9]]";
+//    IO.println("passed pattern string:");
+//    IO.println(drx);
+    if (isCompressedGuessString(guessesAsCompressedString))
+      IO.println("Success!");
     
 
 
