@@ -1,6 +1,8 @@
+import java.time.*;
+import java.time.format.*;
 import java.util.ArrayList;
 //import org.apache.commons.statistics.variance;
-import java.util.List;
+import java.util.Scanner;
 
 enum StatType {
   MEDIAN,
@@ -26,13 +28,11 @@ public class CountryStreak {
           if ( seriesOfStreaks.get(i).intValue() > best )
             best = seriesOfStreaks.get(i).intValue();
         return best;
-
       case StatType.CURRENT:
           if (guessesAsDumbString.endsWith("1") || guessesAsDumbString.endsWith("*"))
             return seriesOfStreaks.getLast().intValue();
           else
             return 0;
-
       default:
           return -1;
     }
@@ -42,12 +42,8 @@ public class CountryStreak {
   {
     int hits = 0;
     for(int i=0;i<s.length();i++)
-    {
       if ((s.charAt(i) == '1') || (s.charAt(i) == '*'))
-      {
         hits ++;
-      }
-    }
     return (double)hits / s.length();
   }
 
@@ -60,12 +56,8 @@ public class CountryStreak {
   {
     timeLineSuccessRate.clear();
     if ( partialStreakLength > 0  &&  partialStreakLength <= guessesAsDumbString.length() )
-    {
       for(int i=0; i <= guessesAsDumbString.length() - partialStreakLength; i++ )
-      {
         timeLineSuccessRate.add( successRateOfPartialString( guessesAsDumbString, i, i+partialStreakLength ));
-      }
-    }
   }
 
   static void inferSeriesOfStreaks()
@@ -89,23 +81,65 @@ public class CountryStreak {
       seriesOfStreaks.add(currentStreak);
   }
 
-  public static void main(String[] args) {
-    guessesAsDumbString = "10010***1?";
+  static void showStats()
+  {
     System.out.println("Your country streak is: " + guessesAsDumbString);
     System.out.println("Your success rate is: " + successRateOfDumbString(guessesAsDumbString));
     inferPartialSuccessRates(5);
     System.out.println("in chunks of 5 guesses, your success rate developed as follows:");
     System.out.println(timeLineSuccessRate);
-    inferSeriesOfStreaks();
     System.out.println("you had the following streaks:");
+    inferSeriesOfStreaks();
     System.out.println(seriesOfStreaks);
     System.out.println("your longest streak was:");
     System.out.println((int)getGuessingStats(StatType.LONGEST));
     System.out.println("your streak average was:");
     System.out.println(getGuessingStats(StatType.MEAN));
     System.out.println("your median streak was:");
-    System.out.println(getGuessingStats(StatType.MEDIAN));
+    System.out.println((int)getGuessingStats(StatType.MEDIAN));
     System.out.println("your current streak is at:");
-    System.out.println(getGuessingStats(StatType.CURRENT));
+    System.out.println((int)getGuessingStats(StatType.CURRENT));
+  }
+
+  static void addGuess()
+  {
+    String guessInput = new java.util.Scanner(System.in).next();
+    System.out.println("input was read as " + guessInput);
+    SingleGuess g = new SingleGuess();
+    g.guessDate = LocalDate.now();
+    g.success = guessInput.contentEquals("*") || guessInput.contentEquals("1") || guessInput.contentEquals("y")
+                ? true : false;
+    guessesAsDumbString += g.success ? '*' : '0';
+
+    DateTimeFormatter formatAtGuessCreation = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    System.out.println("Your guess was registered as '"
+                        + g.success + "' on "
+                        + g.guessDate.format(formatAtGuessCreation));
+  }
+
+  public static void main(String[] args) {
+    int state = 0;
+
+    guessesAsDumbString = "10010***1?";
+
+    do
+    {
+      System.out.println("1 - show stats, 2 - add guess, else - end");
+      state = new java.util.Scanner(System.in).nextInt();
+      switch (state)
+      {
+        case 1:
+          System.out.println(" --- showing stats ---");
+          showStats();
+          break; 
+        case 2:
+          System.out.println(" --- add a guess ---\n successful? (1,*,y if yes)");
+          addGuess();
+          break;
+        default: state = 0;
+      }
+    }
+    while (state > 0);
+    System.out.println(" --- bye ---");   
   }
 }
