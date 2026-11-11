@@ -2,7 +2,6 @@ import java.time.*;
 import java.time.format.*;
 import java.util.ArrayList;
 //import org.apache.commons.statistics.variance;
-import java.util.List;
 import java.util.Scanner;
 
 enum StatType {
@@ -43,12 +42,8 @@ public class CountryStreak {
   {
     int hits = 0;
     for(int i=0;i<s.length();i++)
-    {
       if ((s.charAt(i) == '1') || (s.charAt(i) == '*'))
-      {
         hits ++;
-      }
-    }
     return (double)hits / s.length();
   }
 
@@ -61,12 +56,8 @@ public class CountryStreak {
   {
     timeLineSuccessRate.clear();
     if ( partialStreakLength > 0  &&  partialStreakLength <= guessesAsDumbString.length() )
-    {
       for(int i=0; i <= guessesAsDumbString.length() - partialStreakLength; i++ )
-      {
         timeLineSuccessRate.add( successRateOfPartialString( guessesAsDumbString, i, i+partialStreakLength ));
-      }
-    }
   }
 
   static void inferSeriesOfStreaks()
@@ -105,9 +96,9 @@ public class CountryStreak {
     System.out.println("your streak average was:");
     System.out.println(getGuessingStats(StatType.MEAN));
     System.out.println("your median streak was:");
-    System.out.println(getGuessingStats(StatType.MEDIAN));
+    System.out.println((int)getGuessingStats(StatType.MEDIAN));
     System.out.println("your current streak is at:");
-    System.out.println(getGuessingStats(StatType.CURRENT));
+    System.out.println((int)getGuessingStats(StatType.CURRENT));
   }
 
   static void addGuess()
