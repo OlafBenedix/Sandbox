@@ -3,6 +3,8 @@ import java.time.format.*;
 import java.util.ArrayList;
 //import org.apache.commons.statistics.variance;
 import java.util.Scanner;
+import java.util.regex;
+import java.util.regex.Pattern;
 
 enum StatType {
   MEDIAN,
@@ -42,6 +44,31 @@ public class CountryStreak {
   {
     guessesAsDumbString = guessesAsDumbString.replace('1','*');
     guessesAsDumbString = guessesAsDumbString.replace('0','?');
+  }
+
+  static boolean isCompressedGuessString(String checkOn)
+  {
+    boolean testResult = true;
+    boolean matchFound;
+    Matcher matcher;
+
+    //test for permitted characters
+    Pattern pattern1 = Pattern.compile("[^\\?\\*[0-9]]");
+    matcher = pattern1.matcher(checkOn);
+    matchFound = matcher.find();
+    if(matchFound)
+    {
+      IO.println("complaint!");
+      return false;
+    }
+    else
+      IO.println("no ineligible characters found");
+
+    testResult = testResult && !(matchFound);
+
+    //test for...
+
+    return testResult;
   }
 
   static double successRateOfDumbString(String s)
@@ -129,6 +156,13 @@ public class CountryStreak {
     //Input Data
     guessesAsDumbString = "10?10***1?";
     String guessesAsCompressedString = "*?3*??2*";
+
+    //stuff for debugging regex search
+    String drx = "[^\\?\\*[0-9]]";
+    IO.println("passed pattern string:");
+    IO.println(drx);
+    
+
 
     //sanitize Input Data
     standardizeDumbString();
