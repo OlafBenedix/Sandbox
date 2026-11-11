@@ -38,6 +38,12 @@ public class CountryStreak {
     }
   }
 
+  static void standardizeDumbString()
+  {
+    guessesAsDumbString = guessesAsDumbString.replace('1','*');
+    guessesAsDumbString = guessesAsDumbString.replace('0','?');
+  }
+
   static double successRateOfDumbString(String s)
   {
     int hits = 0;
@@ -109,7 +115,7 @@ public class CountryStreak {
     g.guessDate = LocalDate.now();
     g.success = guessInput.contentEquals("*") || guessInput.contentEquals("1") || guessInput.contentEquals("y")
                 ? true : false;
-    guessesAsDumbString += g.success ? '*' : '0';
+    guessesAsDumbString += g.success ? '*' : '?';
 
     DateTimeFormatter formatAtGuessCreation = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     System.out.println("Your guess was registered as '"
@@ -120,8 +126,14 @@ public class CountryStreak {
   public static void main(String[] args) {
     int state = 0;
 
-    guessesAsDumbString = "10010***1?";
+    //Input Data
+    guessesAsDumbString = "10?10***1?";
+    String guessesAsCompressedString = "*?3*??2*";
 
+    //sanitize Input Data
+    standardizeDumbString();
+
+    //Main Menu
     do
     {
       System.out.println("1 - show stats, 2 - add guess, else - end");
