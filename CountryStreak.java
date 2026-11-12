@@ -3,6 +3,8 @@ import java.time.format.*;
 import java.util.ArrayList;
 //import org.apache.commons.statistics.variance;
 import java.util.Scanner;
+import java.util.stream.DoubleStream;
+import java.util.OptionalDouble;
 import java.util.regex.*;
 
 enum StatType {
@@ -34,6 +36,10 @@ public class CountryStreak {
             return seriesOfStreaks.getLast().intValue();
           else
             return 0;
+      case StatType.MEAN:
+        return seriesOfStreaks.stream().mapToDouble(Integer::intValue).average().getAsDouble();
+      case StatType.MEDIAN:
+        //return seriesOfStreaks.stream().mapToDouble(Integer::intValue).median().getAsDouble();
       default:
           return -1;
     }
