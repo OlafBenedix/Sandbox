@@ -51,6 +51,14 @@ public class CountryStreak {
     guessesAsDumbString = guessesAsDumbString.replace('0','?');
   }
 
+  static boolean isDumbString(String checkOn)
+  {
+    boolean testResult = ! Pattern.compile("[^01\\?\\*]").matcher(checkOn).find();
+    IO.println("Test isDumbString ist " + testResult);
+    
+    return testResult;
+  }
+
   static boolean isCompressedGuessString(String checkOn)
   {
     boolean testResult = true;
@@ -79,7 +87,15 @@ public class CountryStreak {
 
     testResult = testResult && testZeroStart;
 
-    //test for...
+    //test: numbers may not be followed by ? (since they represent multiples of successes only)
+    boolean testNumberFail = ! Pattern.compile("[0-9]\\?").matcher(checkOn).find();
+    IO.println("Test NumberFail ist " + testNumberFail);
+    testResult = testResult && testNumberFail;
+
+    //plausibility test: we believe maximum 3-digit numbers to be realistic
+    boolean testMax3Digits = ! Pattern.compile("[1-9][0-9]{3}").matcher(checkOn).find();
+    IO.println("Test Max3Digits ist " + testMax3Digits);
+    testResult = testResult && testMax3Digits;
 
     return testResult;
   }
@@ -168,7 +184,7 @@ public class CountryStreak {
 
     //Input Data
     guessesAsDumbString = "10?10***1?";
-    String guessesAsCompressedString = "*?3*2*??2*";
+    String guessesAsCompressedString = "*?3*3*??2*";
 
     //stuff for debugging regex search
 //    String drx = "[^\\?\\*[0-9]]";
@@ -176,9 +192,10 @@ public class CountryStreak {
 //    IO.println(drx);
     if (isCompressedGuessString(guessesAsCompressedString))
       IO.println("Success!");
+
+    if (isDumbString(guessesAsDumbString))
+      IO.println("Success2");
     
-
-
     //sanitize Input Data
     standardizeDumbString();
 
