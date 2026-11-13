@@ -22,7 +22,6 @@ public class CountryStreak {
   static double getGuessingStats(StatType type)
   {
     inferSeriesOfStreaks();
-
     switch(type)
     {
       case StatType.LONGEST: 
@@ -39,7 +38,12 @@ public class CountryStreak {
       case StatType.MEAN:
         return seriesOfStreaks.stream().mapToDouble(Integer::intValue).average().getAsDouble();
       case StatType.MEDIAN:
-        //return seriesOfStreaks.stream().mapToDouble(Integer::intValue).median().getAsDouble();
+        var seriesForMedian = new ArrayList<>(seriesOfStreaks);
+        seriesForMedian.sort(null);
+        return 0.5* ( (double)
+                      seriesForMedian.get( (int)( (seriesForMedian.size()-0.99)/2) )
+                    + seriesForMedian.get( (int)( (seriesForMedian.size()+0.01)/2) )
+                    );
       default:
           return -1;
     }
@@ -158,7 +162,7 @@ public class CountryStreak {
     System.out.println("your streak average was:");
     System.out.println(getGuessingStats(StatType.MEAN));
     System.out.println("your median streak was:");
-    System.out.println((int)getGuessingStats(StatType.MEDIAN));
+    System.out.println(getGuessingStats(StatType.MEDIAN));
     System.out.println("your current streak is at:");
     System.out.println((int)getGuessingStats(StatType.CURRENT));
   }
@@ -183,7 +187,7 @@ public class CountryStreak {
     int state = 0;
 
     //Input Data
-    guessesAsDumbString = "10?10***1?";
+    guessesAsDumbString = "10?*10***1?";
     String guessesAsCompressedString = "*?3*3*??2*";
 
     //stuff for debugging regex search
@@ -209,7 +213,7 @@ public class CountryStreak {
         case 1:
           System.out.println(" --- showing stats ---");
           showStats();
-          break; 
+          break;
         case 2:
           System.out.println(" --- add a guess ---\n successful? (1,*,y if yes)");
           addGuess();
