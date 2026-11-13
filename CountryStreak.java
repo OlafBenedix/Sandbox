@@ -40,7 +40,7 @@ public class CountryStreak {
       case StatType.MEDIAN:
         var seriesForMedian = new ArrayList<>(seriesOfStreaks);
         seriesForMedian.sort(null);
-        return 0.5* ( (double)
+        return 0.5* (
                       seriesForMedian.get( (int)( (seriesForMedian.size()-0.99)/2) )
                     + seriesForMedian.get( (int)( (seriesForMedian.size()+0.01)/2) )
                     );
@@ -58,47 +58,34 @@ public class CountryStreak {
   static boolean isDumbString(String checkOn)
   {
     boolean testResult = ! Pattern.compile("[^01\\?\\*]").matcher(checkOn).find();
-    IO.println("Test isDumbString ist " + testResult);
-    
+    //IO.println("Test isDumbString ist " + testResult);
     return testResult;
   }
 
   static boolean isCompressedGuessString(String checkOn)
   {
     boolean testResult = true;
-    boolean matchFound;
-    Matcher matcher;
 
     //test for permitted characters, only *, ?, digits allowed
-    Pattern pattern1 = Pattern.compile("[^\\?\\*[0-9]]");
-    matcher = pattern1.matcher(checkOn);
-    matchFound = matcher.find();
-    if(matchFound)
-      return false;
-
-    testResult = testResult && !(matchFound);
+    boolean testPermittedChar = ! Pattern.compile("[^\\?\\*[0-9]]").matcher(checkOn).find();
+    testResult = testResult && testPermittedChar;
 
     //test for last character, may not be a digit
     boolean testLastChar = checkOn.endsWith("*") || checkOn.endsWith("?");
-
     testResult = testResult && testLastChar;
 
     //test: numbers should not start with digit 0
     boolean testZeroStart = ! checkOn.startsWith("0")
                          && ! Pattern.compile("\\*0").matcher(checkOn).find()
                          && ! Pattern.compile("\\?0").matcher(checkOn).find();
-    IO.println("TestZeroStart ist " + testZeroStart);
-
     testResult = testResult && testZeroStart;
 
     //test: numbers may not be followed by ? (since they represent multiples of successes only)
     boolean testNumberFail = ! Pattern.compile("[0-9]\\?").matcher(checkOn).find();
-    IO.println("Test NumberFail ist " + testNumberFail);
     testResult = testResult && testNumberFail;
 
     //plausibility test: we believe maximum 3-digit numbers to be realistic
     boolean testMax3Digits = ! Pattern.compile("[1-9][0-9]{3}").matcher(checkOn).find();
-    IO.println("Test Max3Digits ist " + testMax3Digits);
     testResult = testResult && testMax3Digits;
 
     return testResult;
@@ -134,14 +121,11 @@ public class CountryStreak {
     {
       if (guessesAsDumbString.charAt(i) == '1' || guessesAsDumbString.charAt(i) == '*')
         currentStreak++;
-      else
-      {
-        if (currentStreak > 0)
+      else if (currentStreak > 0)
         {
           seriesOfStreaks.add(currentStreak);
           currentStreak = 0;
         }
-      }
     }
     if (currentStreak > 0)
       seriesOfStreaks.add(currentStreak);
@@ -173,8 +157,8 @@ public class CountryStreak {
     System.out.println("input was read as " + guessInput);
     SingleGuess g = new SingleGuess();
     g.guessDate = LocalDate.now();
-    g.success = guessInput.contentEquals("*") || guessInput.contentEquals("1") || guessInput.contentEquals("y")
-                ? true : false;
+    g.success = guessInput.contentEquals("*") || guessInput.contentEquals("1") || guessInput.contentEquals("y");
+      //          ? true : false;
     guessesAsDumbString += g.success ? '*' : '?';
 
     DateTimeFormatter formatAtGuessCreation = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -189,16 +173,9 @@ public class CountryStreak {
     //Input Data
     guessesAsDumbString = "10?*10***1?";
     String guessesAsCompressedString = "*?3*3*??2*";
-
-    //stuff for debugging regex search
-//    String drx = "[^\\?\\*[0-9]]";
-//    IO.println("passed pattern string:");
-//    IO.println(drx);
-    if (isCompressedGuessString(guessesAsCompressedString))
-      IO.println("Success!");
-
-    if (isDumbString(guessesAsDumbString))
-      IO.println("Success2");
+    //input may be tested for format compliance by
+    //if (isCompressedGuessString(guessesAsCompressedString))
+    //if (isDumbString(guessesAsDumbString))
     
     //sanitize Input Data
     standardizeDumbString();
