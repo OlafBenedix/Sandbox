@@ -3,6 +3,9 @@ import java.time.format.*;
 import java.util.ArrayList;
 //import org.apache.commons.statistics.variance;
 import java.util.Scanner;
+import java.util.stream.DoubleStream;
+import java.util.OptionalDouble;
+import java.util.regex.*;
 
 enum StatType {
   MEDIAN,
@@ -19,23 +22,69 @@ public class CountryStreak {
   static double getGuessingStats(StatType type)
   {
     inferSeriesOfStreaks();
-
     switch(type)
     {
-      case StatType.LONGEST: 
-        int best = 0;
-        for( int i=0; i<seriesOfStreaks.size(); i++ )
-          if ( seriesOfStreaks.get(i).intValue() > best )
-            best = seriesOfStreaks.get(i).intValue();
-        return best;
+      case StatType.LONGEST:
+        return seriesOfStreaks.stream().mapToInt(Integer::intValue).max().orElse(0);
       case StatType.CURRENT:
           if (guessesAsDumbString.endsWith("1") || guessesAsDumbString.endsWith("*"))
             return seriesOfStreaks.getLast().intValue();
           else
             return 0;
+      case StatType.MEAN:
+        return seriesOfStreaks.stream().mapToDouble(Integer::intValue).average().orElse(0.);
+      case StatType.MEDIAN:
+        var seriesForMedian = new ArrayList<>(seriesOfStreaks);
+        seriesForMedian.sort(null);
+        return 0.5* (
+                      seriesForMedian.get( (int)( (seriesForMedian.size()-0.99)/2) )
+                    + seriesForMedian.get( (int)( (seriesForMedian.size()+0.01)/2) )
+                    );
       default:
           return -1;
     }
+  }
+
+  static void standardizeDumbString()
+  {
+    guessesAsDumbString = guessesAsDumbString.replace('1','*');
+    guessesAsDumbString = guessesAsDumbString.replace('0','?');
+  }
+
+  static boolean isDumbString(String checkOn)
+  {
+    boolean testResult = ! Pattern.compile("[^01\\?\\*]").matcher(checkOn).find();
+    //IO.println("Test isDumbString ist " + testResult);
+    return testResult;
+  }
+
+  static boolean isCompressedGuessString(String checkOn)
+  {
+    boolean testResult = true;
+
+    //test for permitted characters, only *, ?, digits allowed
+    boolean testPermittedChar = ! Pattern.compile("[^\\?\\*[0-9]]").matcher(checkOn).find();
+    testResult = testResult && testPermittedChar;
+
+    //test for last character, may not be a digit
+    boolean testLastChar = checkOn.endsWith("*") || checkOn.endsWith("?");
+    testResult = testResult && testLastChar;
+
+    //test: numbers should not start with digit 0
+    boolean testZeroStart = ! checkOn.startsWith("0")
+                         && ! Pattern.compile("\\*0").matcher(checkOn).find()
+                         && ! Pattern.compile("\\?0").matcher(checkOn).find();
+    testResult = testResult && testZeroStart;
+
+    //test: numbers may not be followed by ? (since they represent multiples of successes only)
+    boolean testNumberFail = ! Pattern.compile("[0-9]\\?").matcher(checkOn).find();
+    testResult = testResult && testNumberFail;
+
+    //plausibility test: we believe maximum 3-digit numbers to be realistic
+    boolean testMax3Digits = ! Pattern.compile("[1-9][0-9]{3}").matcher(checkOn).find();
+    testResult = testResult && testMax3Digits;
+
+    return testResult;
   }
 
   static double successRateOfDumbString(String s)
@@ -68,14 +117,11 @@ public class CountryStreak {
     {
       if (guessesAsDumbString.charAt(i) == '1' || guessesAsDumbString.charAt(i) == '*')
         currentStreak++;
-      else
-      {
-        if (currentStreak > 0)
+      else if (currentStreak > 0)
         {
           seriesOfStreaks.add(currentStreak);
           currentStreak = 0;
         }
-      }
     }
     if (currentStreak > 0)
       seriesOfStreaks.add(currentStreak);
@@ -84,32 +130,27 @@ public class CountryStreak {
   static void showStats()
   {
     System.out.println("Your country streak is: " + guessesAsDumbString);
-    System.out.println("Your success rate is: " + successRateOfDumbString(guessesAsDumbString));
+    System.out.printf("Your overall success rate is: %.2f%%%n", 100*successRateOfDumbString(guessesAsDumbString));
     inferPartialSuccessRates(5);
     System.out.println("in chunks of 5 guesses, your success rate developed as follows:");
     System.out.println(timeLineSuccessRate);
     System.out.println("you had the following streaks:");
     inferSeriesOfStreaks();
     System.out.println(seriesOfStreaks);
-    System.out.println("your longest streak was:");
-    System.out.println((int)getGuessingStats(StatType.LONGEST));
-    System.out.println("your streak average was:");
-    System.out.println(getGuessingStats(StatType.MEAN));
-    System.out.println("your median streak was:");
-    System.out.println((int)getGuessingStats(StatType.MEDIAN));
-    System.out.println("your current streak is at:");
-    System.out.println((int)getGuessingStats(StatType.CURRENT));
+    System.out.printf("your longest streak was: %d%n", (int)getGuessingStats(StatType.LONGEST));
+    System.out.printf("your streak average was: %.2f%n",getGuessingStats(StatType.MEAN));
+    System.out.println("your median streak was: " + getGuessingStats(StatType.MEDIAN));
+    System.out.println("your current streak is at: " + (int)getGuessingStats(StatType.CURRENT));
   }
 
   static void addGuess()
   {
-    String guessInput = new java.util.Scanner(System.in).next();
+    String guessInput = IO.readln();
     System.out.println("input was read as " + guessInput);
     SingleGuess g = new SingleGuess();
     g.guessDate = LocalDate.now();
-    g.success = guessInput.contentEquals("*") || guessInput.contentEquals("1") || guessInput.contentEquals("y")
-                ? true : false;
-    guessesAsDumbString += g.success ? '*' : '0';
+    g.success = guessInput.contentEquals("*") || guessInput.contentEquals("1") || guessInput.contentEquals("y");
+    guessesAsDumbString += g.success ? '*' : '?';
 
     DateTimeFormatter formatAtGuessCreation = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     System.out.println("Your guess was registered as '"
@@ -120,18 +161,27 @@ public class CountryStreak {
   public static void main(String[] args) {
     int state = 0;
 
-    guessesAsDumbString = "10010***1?";
+    //Input Data
+    guessesAsDumbString = "10?*10***1?";
+    String guessesAsCompressedString = "*?3*3*??2*";
+    //input may be tested for format compliance by
+    //if (isCompressedGuessString(guessesAsCompressedString))
+    //if (isDumbString(guessesAsDumbString))
+    
+    //sanitize Input Data
+    standardizeDumbString();
 
+    //Main Menu
     do
     {
-      System.out.println("1 - show stats, 2 - add guess, else - end");
-      state = new java.util.Scanner(System.in).nextInt();
+      IO.println("1 - show stats, 2 - add guess, else - end");
+      state = Integer.parseInt(IO.readln().trim());//orElse: repeat menu
       switch (state)
       {
         case 1:
           System.out.println(" --- showing stats ---");
           showStats();
-          break; 
+          break;
         case 2:
           System.out.println(" --- add a guess ---\n successful? (1,*,y if yes)");
           addGuess();
