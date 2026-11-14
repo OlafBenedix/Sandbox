@@ -24,19 +24,15 @@ public class CountryStreak {
     inferSeriesOfStreaks();
     switch(type)
     {
-      case StatType.LONGEST: 
-        int best = 0;
-        for( int i=0; i<seriesOfStreaks.size(); i++ )
-          if ( seriesOfStreaks.get(i).intValue() > best )
-            best = seriesOfStreaks.get(i).intValue();
-        return best;
+      case StatType.LONGEST:
+        return seriesOfStreaks.stream().mapToInt(Integer::intValue).max().orElse(0);
       case StatType.CURRENT:
           if (guessesAsDumbString.endsWith("1") || guessesAsDumbString.endsWith("*"))
             return seriesOfStreaks.getLast().intValue();
           else
             return 0;
       case StatType.MEAN:
-        return seriesOfStreaks.stream().mapToDouble(Integer::intValue).average().getAsDouble();
+        return seriesOfStreaks.stream().mapToDouble(Integer::intValue).average().orElse(0.);
       case StatType.MEDIAN:
         var seriesForMedian = new ArrayList<>(seriesOfStreaks);
         seriesForMedian.sort(null);
@@ -134,31 +130,26 @@ public class CountryStreak {
   static void showStats()
   {
     System.out.println("Your country streak is: " + guessesAsDumbString);
-    System.out.println("Your success rate is: " + successRateOfDumbString(guessesAsDumbString));
+    System.out.printf("Your overall success rate is: %.2f%%%n", 100*successRateOfDumbString(guessesAsDumbString));
     inferPartialSuccessRates(5);
     System.out.println("in chunks of 5 guesses, your success rate developed as follows:");
     System.out.println(timeLineSuccessRate);
     System.out.println("you had the following streaks:");
     inferSeriesOfStreaks();
     System.out.println(seriesOfStreaks);
-    System.out.println("your longest streak was:");
-    System.out.println((int)getGuessingStats(StatType.LONGEST));
-    System.out.println("your streak average was:");
-    System.out.println(getGuessingStats(StatType.MEAN));
-    System.out.println("your median streak was:");
-    System.out.println(getGuessingStats(StatType.MEDIAN));
-    System.out.println("your current streak is at:");
-    System.out.println((int)getGuessingStats(StatType.CURRENT));
+    System.out.printf("your longest streak was: %d%n", (int)getGuessingStats(StatType.LONGEST));
+    System.out.printf("your streak average was: %.2f%n",getGuessingStats(StatType.MEAN));
+    System.out.println("your median streak was: " + getGuessingStats(StatType.MEDIAN));
+    System.out.println("your current streak is at: " + (int)getGuessingStats(StatType.CURRENT));
   }
 
   static void addGuess()
   {
-    String guessInput = new java.util.Scanner(System.in).next();
+    String guessInput = IO.readln();
     System.out.println("input was read as " + guessInput);
     SingleGuess g = new SingleGuess();
     g.guessDate = LocalDate.now();
     g.success = guessInput.contentEquals("*") || guessInput.contentEquals("1") || guessInput.contentEquals("y");
-      //          ? true : false;
     guessesAsDumbString += g.success ? '*' : '?';
 
     DateTimeFormatter formatAtGuessCreation = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -183,8 +174,8 @@ public class CountryStreak {
     //Main Menu
     do
     {
-      System.out.println("1 - show stats, 2 - add guess, else - end");
-      state = new java.util.Scanner(System.in).nextInt();
+      IO.println("1 - show stats, 2 - add guess, else - end");
+      state = Integer.parseInt(IO.readln().trim());//orElse: repeat menu
       switch (state)
       {
         case 1:
