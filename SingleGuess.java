@@ -1,6 +1,7 @@
 import java.time.*;
 
 public class SingleGuess {
+    private static int maxID = 0;
     private int guessID;
     private boolean success;
     private LocalDate guessDate;
@@ -9,36 +10,44 @@ public class SingleGuess {
     //points
     //guesstime
 
-    int getGuessID(){
+    public int getGuessID(){
         return guessID;
     }
 
-    void setSuccess(boolean success){
+    public void setSuccess(boolean success){
         this.success = success;
     }
 
-    boolean getSuccess(){
+    public boolean getSuccess(){
         return success;
     }
 
-    void setGuessDate(LocalDate guessDate){
+    public void setGuessDate(LocalDate guessDate){
         this.guessDate = guessDate;
     }
     
-    LocalDate getGuessDate(){
+    public LocalDate getGuessDate(){
         return guessDate;
     }
 
-    SingleGuess() {
+    public SingleGuess() {
         guessID = 0;
         success = false;
         guessDate = LocalDate.now();
     }
 
-    SingleGuess(boolean success, LocalDate guessDate) {
-        guessID = 0;
+    public SingleGuess(boolean success, LocalDate guessDate) {
+        guessID = ++maxID;//0;
         this.success = success;
         this.guessDate = guessDate;
     }
+
+    public String toString(){
+        return
+              super.toString()
+              + "\nGuessID " + guessID
+              + " of success " + success
+              + " made on " + guessDate;
+    }
+
 }
-//printfunktion toString von Objekt überladen?

@@ -177,7 +177,7 @@ public class CountryStreak {
     do
     {
       IO.println("1 - show stats, 2 - add guess, else - end");
-      state = Integer.parseInt(IO.readln().trim());//orElse: repeat menu
+      state = Integer.parseInt(IO.readln().trim());//3 - end; orElse: repeat menu
       switch (state)
       {
         case 1:
