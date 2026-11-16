@@ -1,8 +1,6 @@
 import java.time.*;
 import java.time.format.*;
 import java.util.ArrayList;
-//import org.apache.commons.statistics.variance;
-import java.util.Scanner;
 import java.util.stream.DoubleStream;
 import java.util.OptionalDouble;
 import java.util.regex.*;
@@ -147,15 +145,19 @@ public class CountryStreak {
   {
     String guessInput = IO.readln();
     System.out.println("input was read as " + guessInput);
-    SingleGuess g = new SingleGuess();
-    g.guessDate = LocalDate.now();
-    g.success = guessInput.contentEquals("*") || guessInput.contentEquals("1") || guessInput.contentEquals("y");
-    guessesAsDumbString += g.success ? '*' : '?';
+    SingleGuess g = new SingleGuess(
+      guessInput.contentEquals("*") || guessInput.contentEquals("1") || guessInput.contentEquals("y"),
+      LocalDate.now()
+        );
+    //g.setGuessDate(LocalDate.now());
+    //g.setSuccess ( guessInput.contentEquals("*") || guessInput.contentEquals("1") || guessInput.contentEquals("y"));
+    guessesAsDumbString += g.getSuccess() ? '*' : '?';
 
     DateTimeFormatter formatAtGuessCreation = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     System.out.println("Your guess was registered as '"
-                        + g.success + "' on "
-                        + g.guessDate.format(formatAtGuessCreation));
+                        + g.getSuccess() + "' on "
+                        + g.getGuessDate().format(formatAtGuessCreation)
+                        + " with Guess ID# " + g.getGuessID());
   }
 
   public static void main(String[] args) {
