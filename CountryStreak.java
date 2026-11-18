@@ -125,8 +125,8 @@ public class CountryStreak {
       seriesOfStreaks.add(currentStreak);
   }
 
-  static void showStats()
-  {/*
+//  static void showStats()
+  /*
     System.out.println("Your country streak is: " + guessesAsDumbString);
     System.out.printf("Your overall success rate is: %.2f%%%n", 100*successRateOfDumbString(guessesAsDumbString));
     inferPartialSuccessRates(5);
@@ -139,7 +139,7 @@ public class CountryStreak {
     System.out.printf("your streak average was: %.2f%n",getGuessingStats(StatType.MEAN));
     System.out.println("your median streak was: " + getGuessingStats(StatType.MEDIAN));
     System.out.println("your current streak is at: " + (int)getGuessingStats(StatType.CURRENT));
-*/  }
+//*///  }
 
   static void browseGuesses()
   {
@@ -152,8 +152,8 @@ public class CountryStreak {
 
   static void addGuess()
   {
+    IO.println(" --- add a guess ---\n successful? (1,*,y if yes)");      
     String guessInput = IO.readln();
-    System.out.println("input was read as " + guessInput);
     SingleGuess g = new SingleGuess(
       guessInput.contentEquals("*") || guessInput.contentEquals("1") || guessInput.contentEquals("y"),
       LocalDate.now()
@@ -215,12 +215,9 @@ public class CountryStreak {
       switch (state)
       {
         case 1:
-          //System.out.println(" --- showing stats ---");
-          //showStats();
           browseGuesses();
           break;
         case 2:
-          System.out.println(" --- add a guess ---\n successful? (1,*,y if yes)");
           addGuess();
           break;
         case 3:
