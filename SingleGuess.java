@@ -37,7 +37,7 @@ public class SingleGuess {
     }
 
     public SingleGuess(boolean success, LocalDate guessDate) {
-        guessID = ++maxID;//0;
+        guessID = ++maxID;
         this.success = success;
         this.guessDate = guessDate;
     }
