@@ -6,7 +6,6 @@ public class SingleGuess {
     private boolean success;
     private LocalDate guessDate;
 //    LocalDateTime guessTimeStamp;
-    //country
     //points
     //guesstime
 

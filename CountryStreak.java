@@ -197,6 +197,9 @@ public class CountryStreak {
   public static void main(String[] args) {
     int state = 0;
 
+CountryGuess cg = new CountryGuess();
+IO.println(cg);
+
     //Input Data
     guessesAsDumbString = "10?*10***1?";
     String guessesAsCompressedString = "*?3*3*??2*";
