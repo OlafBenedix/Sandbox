@@ -6,6 +6,7 @@ public class SingleGuess {
     private boolean success;
     private LocalDate guessDate;
 //    LocalDateTime guessTimeStamp;
+    private final GameMode gameMode;
     //country
     //points
     //guesstime
@@ -30,22 +31,36 @@ public class SingleGuess {
         return guessDate;
     }
 
+    public GameMode getGameMode(){
+        return gameMode;
+    }
+
     public SingleGuess() {
         guessID = 0;
         success = false;
         guessDate = LocalDate.now();
+        gameMode = GameMode.UNKNOWN;
     }
 
     public SingleGuess(boolean success, LocalDate guessDate) {
         guessID = ++maxID;
         this.success = success;
         this.guessDate = guessDate;
+        gameMode = GameMode.UNKNOWN;
+    }
+
+        public SingleGuess(boolean success, LocalDate guessDate, GameMode gameMode) {
+        guessID = ++maxID;
+        this.success = success;
+        this.guessDate = guessDate;
+        this.gameMode = gameMode;
     }
 
     public String toString(){
         return
               super.toString()
               + "\nGuessID " + guessID
+              + " in game mode " + gameMode
               + " of success " + success
               + " made on " + guessDate;
     }

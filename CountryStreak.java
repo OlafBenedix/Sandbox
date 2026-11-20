@@ -12,6 +12,14 @@ enum StatType {
   CURRENT
 }
 
+enum GameMode {
+  MOVING,
+  NO_MOVE,
+  NMPZ,
+  TURBO,
+  UNKNOWN
+}
+
 public class CountryStreak {
   static String guessesAsDumbString;
   static ArrayList<Double> timeLineSuccessRate = new ArrayList<Double>();
@@ -164,7 +172,8 @@ public class CountryStreak {
     IO.println("Your guess was registered as '"
                         + g.getSuccess() + "' on "
                         + g.getGuessDate().format(formatAtGuessCreation)
-                        + " with Guess ID# " + g.getGuessID());
+                        + " with Guess ID# " + g.getGuessID()
+                        + " in game mode " + g.getGameMode());
   }
 
   static void showStatsSuccessRates()
