@@ -7,9 +7,6 @@ public class SingleGuess {
     private LocalDate guessDate;
 //    LocalDateTime guessTimeStamp;
     private final GameMode gameMode;
-    //country
-    //points
-    //guesstime
 
     public int getGuessID(){
         return guessID;
