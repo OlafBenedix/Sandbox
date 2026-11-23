@@ -1,12 +1,12 @@
 import java.time.*;
-import java.util.OptionalDouble;
+//import java.util.OptionalDouble;
 
 class SingleScoredGuess extends SingleGuess implements Scored {
     public final static double MINIMUM_SCORE = 0.0;
     public final static double MAXIMUM_SCORE = 5000.0;
     public final double CUTOFF_5K = 0.5; // 500 meters magic number; will be refactored later when grading curves are implemented
-    private Double score;
-    private Double distanceKm;
+    private double score;
+    private double distanceKm;
 
     public SingleScoredGuess(boolean success, LocalDate guessDate, GameMode gameMode, double score, double distanceKm) {
         super(success, guessDate, gameMode);
@@ -15,8 +15,7 @@ class SingleScoredGuess extends SingleGuess implements Scored {
     }
 
     public SingleScoredGuess(boolean success, LocalDate guessDate, double score, double distanceKm) {
-        IO.print("testing..." + success + guessDate + GameMode.UNKNOWN + score + distanceKm);
-        //SingleScoredGuess(success, guessDate, GameMode.UNKNOWN, score, distanceKm);
+        this(success, guessDate, GameMode.UNKNOWN, score, distanceKm);
     }
 
     public static SingleScoredGuess withScoreAndDistance(boolean success, LocalDate guessDate, GameMode gameMode, double score, double distanceKm) {
@@ -46,25 +45,25 @@ class SingleScoredGuess extends SingleGuess implements Scored {
     @Override
     public double getExactScore() {
         //todo: display/log warning if score is null (when warning system has been implemented)
-        return score;//.orElse(0.0);
+        return (score == Double.NaN) ? 0.0 : score;
     }
 
     @Override
     public int getOfficialScore() {
-        //todo: display/log warning if score is null (when warning system has been implemented)
-        return (int) Math.round(score);//.orElse(0.0));
+        //todo: display/log warning if score is NaN (when warning system has been implemented)
+        return (score == Double.NaN) ? 0 : (int) Math.round(score);
     }
 
     @Override
     public double getDistanceKm() {
-        //todo: display/log warning if distanceKm is null (when warning system has been implemented)
+        //todo: display/log warning if distanceKm is NaN (when warning system has been implemented)
         return distanceKm;
     }
 
     @Override
     public double getEstimatedScoreFromDistance() {
         // example implementation - will be refactored later when grading curves are implemented
-        if (distanceKm.isNaN())
+        if (distanceKm == Double.NaN)
             return 0.0;
         else if (distanceKm < CUTOFF_5K)
             return MAXIMUM_SCORE;
