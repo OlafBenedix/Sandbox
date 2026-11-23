@@ -191,6 +191,7 @@ public class CountryStreak {
     int state = 0;
 
     //Input Data
+    //IO.println("testing: "+ new CountryGuess(true, LocalDate.now(), "USA"));
     guessesAsDumbString = "10?*10***1?";
     String guessesAsCompressedString = "*?3*3*??2*";
     //input may be tested for format compliance by
