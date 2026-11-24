@@ -85,6 +85,23 @@ public class GuessHistory {
         //Name, Anzahl Guesses, Datum frühester + letzter Guess, ggf. Anzahl spezialisierter Guesses (Country, timed...)
       }
 
+      public void printOneGuessBasic(int index) {
+        if (index < 0 || index >= guesses.size()) {
+            IO.println("Invalid index for guess.");
+            return;
+        }
+        IO.println(guesses.get(index).getBasicInfo());
+      }
+
+      public void printOneGuessDetailed(int index) {
+        if (index < 0 || index >= guesses.size()) {
+            IO.println("Invalid index for guess.");
+            return;
+        }
+        IO.println(guesses.get(index).getDetailedInfo());
+      }
+
+
       public void peekPreview(int startIndex, int endIndex) {
         if (startIndex > endIndex)
             return;
@@ -93,7 +110,8 @@ public class GuessHistory {
             return;
         }
         for (int i = startIndex; i <= endIndex; i++) {
-            IO.println(guesses.get(i).toString());
+            //IO.println(guesses.get(i).toString());
+            printOneGuessDetailed(i);
         }
     }
 

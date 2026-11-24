@@ -28,6 +28,10 @@ public class CountryGuess extends SingleGuess {
         setCountry(country);
     }
 
+    public String getDetailedInfo() {
+        return getGuessID() + "\n" + getGuessDate() + "\n" + getCountry() + "\n" + getGameMode() + "\n" + getSuccess();
+    }
+
     public String toString(){
         return super.toString()
                + " on a location in " + country;

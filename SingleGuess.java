@@ -53,6 +53,14 @@ public class SingleGuess {
         this.gameMode = gameMode;
     }
 
+    public String getBasicInfo() {
+        return guessID + "\n" + guessDate + "\n" + success;
+    }
+
+    public String getDetailedInfo() {
+        return guessID + "\n" + guessDate + "\n" + gameMode + "\n" + success;
+    }
+
     public String toString(){
         return
               super.toString()

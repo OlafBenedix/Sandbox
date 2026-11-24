@@ -77,4 +77,13 @@ class SingleScoredGuess extends SingleGuess implements Scored {
         return 0.0;
     }
 
+    public String getDetailedInfo() {
+        return getGuessID()
+               + "\n" + getGuessDate()
+               + "\n" + ((score == Double.NaN) ? "points unknown" : score)
+                + "\n" + ((distanceKm == Double.NaN) ? "distance unknown" : distanceKm + " km")
+               + "\n" + getGameMode()
+               + "\n" + getSuccess();
+    }
+
 }
