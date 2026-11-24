@@ -198,7 +198,7 @@ public class CountryStreak {
     testGH.addGuess(new SingleTimedGuess(true, LocalDate.now().minusDays(1), GameMode.MOVING, 45.3, 60.0));
     testGH.addGuess(new SingleGuess(false, LocalDate.now().minusDays(3), GameMode.TURBO));
     testGH.addGuess(new SingleTimedGuess(true, LocalDate.now().minusDays(7), GameMode.MOVING, 60.0, 60.0));
-    testGH.addGuess(new CountryGuess(true, LocalDate.now().minusDays(4), "RWA"));
+    testGH.addGuess(new SingleCountryGuess(true, LocalDate.now().minusDays(4), "RWA"));
     testGH.printBasicStats();
     IO.println("---------------");
     testGH.peekPreview(0, 6);
