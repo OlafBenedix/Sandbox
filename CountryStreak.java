@@ -3,22 +3,6 @@ import java.time.format.*;
 import java.util.ArrayList;
 import java.util.stream.DoubleStream;
 import java.util.OptionalDouble;
-import java.util.regex.*;
-
-enum StatType {
-  MEDIAN,
-  MEAN,
-  LONGEST,
-  CURRENT
-}
-
-enum GameMode {
-  MOVING,
-  NO_MOVE,
-  NMPZ,
-  TURBO,
-  UNKNOWN
-}
 
 public class CountryStreak {
   static String guessesAsDumbString;
@@ -49,48 +33,6 @@ public class CountryStreak {
       default:
           return -1;
     }
-  }
-
-  static void standardizeDumbString()
-  {
-    guessesAsDumbString = guessesAsDumbString.replace('1','*');
-    guessesAsDumbString = guessesAsDumbString.replace('0','?');
-  }
-
-  static boolean isDumbString(String checkOn)
-  {
-    boolean testResult = ! Pattern.compile("[^01\\?\\*]").matcher(checkOn).find();
-    //IO.println("Test isDumbString ist " + testResult);
-    return testResult;
-  }
-
-  static boolean isCompressedGuessString(String checkOn)
-  {
-    boolean testResult = true;
-
-    //test for permitted characters, only *, ?, digits allowed
-    boolean testPermittedChar = ! Pattern.compile("[^\\?\\*[0-9]]").matcher(checkOn).find();
-    testResult = testResult && testPermittedChar;
-
-    //test for last character, may not be a digit
-    boolean testLastChar = checkOn.endsWith("*") || checkOn.endsWith("?");
-    testResult = testResult && testLastChar;
-
-    //test: numbers should not start with digit 0
-    boolean testZeroStart = ! checkOn.startsWith("0")
-                         && ! Pattern.compile("\\*0").matcher(checkOn).find()
-                         && ! Pattern.compile("\\?0").matcher(checkOn).find();
-    testResult = testResult && testZeroStart;
-
-    //test: numbers may not be followed by ? (since they represent multiples of successes only)
-    boolean testNumberFail = ! Pattern.compile("[0-9]\\?").matcher(checkOn).find();
-    testResult = testResult && testNumberFail;
-
-    //plausibility test: we believe maximum 3-digit numbers to be realistic
-    boolean testMax3Digits = ! Pattern.compile("[1-9][0-9]{3}").matcher(checkOn).find();
-    testResult = testResult && testMax3Digits;
-
-    return testResult;
   }
 
   static double successRateOfDumbString(String s)
@@ -205,14 +147,17 @@ public class CountryStreak {
 
     //placeholder block for Input Data - later to be read from file
     //IO.println("testing: "+ new CountryGuess(true, LocalDate.now(), "USA"));
-    guessesAsDumbString = "10?*10***1?";
-    String guessesAsCompressedString = "*?3*3*??2*";
+    guessesAsDumbString = "10?**10***1?";
+    String guessesAsCompressedString = "*?10*?*??2*";
     //input may be tested for format compliance by
-    //if (isCompressedGuessString(guessesAsCompressedString))
-    //if (isDumbString(guessesAsDumbString))
+    if (GuessingUtils.isCompressedGuessString(guessesAsCompressedString))
+      IO.println("compressed guess string is valid");
+    else
+      IO.println("compressed guess string is invalid");
     
     //sanitize Input Data
-    standardizeDumbString();
+    if (GuessingUtils.isDumbString(guessesAsDumbString))
+      guessesAsDumbString = GuessingUtils.standardizeDumbString(guessesAsDumbString);
 
     //testing for achievement
     Achievement testAchievement = null;
