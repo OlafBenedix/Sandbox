@@ -190,7 +190,20 @@ public class CountryStreak {
   public static void main(String[] args) {
     int state = 0;
 
-    //Input Data
+    //Test Data for currently developed features
+    GuessHistory testGH = new GuessHistory();
+    testGH.addGuess(new SingleGuess(true, LocalDate.now(), GameMode.NMPZ));
+    testGH.addGuess(new SingleScoredGuess(false, LocalDate.now().minusDays(2), 3421, 567.0));
+    testGH.addGuess(new SingleGuess());
+    testGH.addGuess(new SingleTimedGuess(true, LocalDate.now().minusDays(1), GameMode.MOVING, 45.3, 60.0));
+    testGH.addGuess(new SingleGuess(false, LocalDate.now().minusDays(3), GameMode.TURBO));
+    testGH.addGuess(new SingleTimedGuess(true, LocalDate.now().minusDays(7), GameMode.MOVING, 60.0, 60.0));
+    testGH.addGuess(new SingleCountryGuess(true, LocalDate.now().minusDays(4), "RWA"));
+    testGH.printBasicStats();
+    IO.println("---------------");
+    testGH.peekPreview(0, 6);
+
+    //placeholder block for Input Data - later to be read from file
     //IO.println("testing: "+ new CountryGuess(true, LocalDate.now(), "USA"));
     guessesAsDumbString = "10?*10***1?";
     String guessesAsCompressedString = "*?3*3*??2*";

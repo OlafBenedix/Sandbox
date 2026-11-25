@@ -1,7 +1,7 @@
 import java.util.regex.*;
 import java.time.*;
 
-public class CountryGuess extends SingleGuess {
+public class SingleCountryGuess extends SingleGuess {
     private String country;
 
     public void setCountry(String country){
@@ -18,14 +18,18 @@ public class CountryGuess extends SingleGuess {
         return country;
     }
 
-    public CountryGuess() {
+    public SingleCountryGuess() {
         super();
         setCountry("");
     }
 
-    public CountryGuess(boolean success, LocalDate guessDate, String country) {
+    public SingleCountryGuess(boolean success, LocalDate guessDate, String country) {
         super(success, guessDate);
         setCountry(country);
+    }
+
+    public String getDetailedInfo() {
+        return getGuessID() + "\n" + getGuessDate() + "\n" + getCountry() + "\n" + getGameMode() + "\n" + getSuccess();
     }
 
     public String toString(){

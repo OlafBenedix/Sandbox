@@ -29,4 +29,15 @@ public class SingleTimedGuess extends SingleGuess implements Timed {
     public boolean didGuessTimeRunOut() {
         return guessTime >= allottedTime;
     }
+
+
+    public String getDetailedInfo() {
+        return getGuessID()
+               + "\n" + getGuessDate()
+               + "\n" + guessTime + " seconds"
+               + "\n" + allottedTime + " seconds"
+               + (didGuessTimeRunOut() ? "\n(out of time)" : "")
+               + "\n" + getGameMode()
+               + "\n" + getSuccess();
+    }
 }

@@ -7,9 +7,6 @@ public class SingleGuess {
     private LocalDate guessDate;
 //    LocalDateTime guessTimeStamp;
     private final GameMode gameMode;
-    //country
-    //points
-    //guesstime
 
     public int getGuessID(){
         return guessID;
@@ -54,6 +51,14 @@ public class SingleGuess {
         this.success = success;
         this.guessDate = guessDate;
         this.gameMode = gameMode;
+    }
+
+    public String getBasicInfo() {
+        return guessID + "\n" + guessDate + "\n" + success;
+    }
+
+    public String getDetailedInfo() {
+        return guessID + "\n" + guessDate + "\n" + gameMode + "\n" + success;
     }
 
     public String toString(){
