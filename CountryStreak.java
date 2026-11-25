@@ -214,6 +214,18 @@ public class CountryStreak {
     //sanitize Input Data
     standardizeDumbString();
 
+    //testing for achievement
+    Achievement testAchievement = null;
+    if(getGuessingStats(StatType.LONGEST) >= 4)
+        testAchievement = new Achievement("4-in-a-row", "Test Player 1", 1, LocalDate.now(), "guessed the correct country 4 times in a row");
+    //later, we can now check if the achievement has been unlocked
+    if (testAchievement != null)
+        IO.println("Achievement unlocked: " + testAchievement.name() + " for player " + testAchievement.playerName() + " on " + testAchievement.date());
+        //in this case, we can deal further with the achievement, e.g. store it somewhere etc...
+    else
+        IO.println("No achievement unlocked yet.");
+    //end of achievement testing
+    
     //Main Menu
     do
     {
