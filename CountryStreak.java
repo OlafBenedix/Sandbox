@@ -11,7 +11,8 @@ public class CountryStreak {
 
   static double getGuessingStats(StatType type)
   {
-    inferSeriesOfStreaks();
+    //inferSeriesOfStreaks();
+    seriesOfStreaks = GuessingUtils.getStreaksFromSimpleString(guessesAsDumbString);
     switch(type)
     {
       case StatType.LONGEST:
@@ -55,24 +56,6 @@ public class CountryStreak {
     if ( partialStreakLength > 0  &&  partialStreakLength <= guessesAsDumbString.length() )
       for(int i=0; i <= guessesAsDumbString.length() - partialStreakLength; i++ )
         timeLineSuccessRate.add( successRateOfPartialString( guessesAsDumbString, i, i+partialStreakLength ));
-  }
-
-  static void inferSeriesOfStreaks()
-  {
-    seriesOfStreaks.clear();
-    int currentStreak = 0;
-    for(int i=0; i < guessesAsDumbString.length(); i++)
-    {
-      if (guessesAsDumbString.charAt(i) == '1' || guessesAsDumbString.charAt(i) == '*')
-        currentStreak++;
-      else if (currentStreak > 0)
-        {
-          seriesOfStreaks.add(currentStreak);
-          currentStreak = 0;
-        }
-    }
-    if (currentStreak > 0)
-      seriesOfStreaks.add(currentStreak);
   }
 
   static void browseGuesses()
@@ -121,7 +104,8 @@ public class CountryStreak {
 
   static void showStatsStreaks()
   {
-    inferSeriesOfStreaks();
+    //inferSeriesOfStreaks();
+    seriesOfStreaks = GuessingUtils.getStreaksFromSimpleString(guessesAsDumbString);
     IO.println("you had the following streaks:\n"+seriesOfStreaks);
     IO.println("your longest streak was: %d%n".formatted((int)getGuessingStats(StatType.LONGEST)));
     IO.println("your streak average was: %.2f%n".formatted(getGuessingStats(StatType.MEAN)));

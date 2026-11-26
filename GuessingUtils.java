@@ -1,4 +1,5 @@
 import java.util.regex.*;
+import java.util.ArrayList;
 
 enum StatType {
   MEDIAN,
@@ -16,6 +17,25 @@ enum GameMode {
 }
 
 public class GuessingUtils {
+
+  static ArrayList<Integer> getStreaksFromSimpleString(String ss)
+  {
+    ArrayList<Integer> streaks = new ArrayList<>();
+    int currentStreak = 0;
+    for(int i=0; i < ss.length(); i++)
+    {
+      if (ss.charAt(i) == '1' || ss.charAt(i) == '*')
+        currentStreak++;
+      else if (currentStreak > 0)
+        {
+          streaks.add(currentStreak);
+          currentStreak = 0;
+        }
+    }
+    if (currentStreak > 0)
+      streaks.add(currentStreak);
+    return streaks;
+  }
 
   static String standardizeDumbString(String dumbString)
   {
