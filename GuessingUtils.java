@@ -37,6 +37,25 @@ public class GuessingUtils {
     return streaks;
   }
 
+  static double successRateOfSimpleString(String s)
+  {
+    int hits = 0;
+    for(int i=0;i<s.length();i++)
+      if ((s.charAt(i) == '1') || (s.charAt(i) == '*'))
+        hits ++;
+    return (double)hits / s.length();
+  }
+
+  static ArrayList<Double> getPartialSuccessRatesFromSimpleString(int chunk, String ss)
+  {
+    //todo: prüfen auf korrektes format von ss, absichern mit exception
+    ArrayList<Double> psr = new ArrayList<Double>();
+    if ( chunk > 0  &&  chunk <= ss.length() )
+      for(int i=0; i <= ss.length() - chunk; i++ )
+        psr.add( successRateOfSimpleString( ss.substring(i, i+chunk) ) );
+    return psr;
+  }
+
   static String standardizeDumbString(String dumbString)
   {
     String simpleString = dumbString.replace('1','*');
@@ -76,5 +95,31 @@ public class GuessingUtils {
     testResult = testResult && testMax3Digits;
 
     return testResult;
+  }
+
+  static double getGuessingStatsFromSimpleString(StatType type, String ss)
+  {
+    var streaks = GuessingUtils.getStreaksFromSimpleString(ss);
+    switch(type)
+    {
+      case StatType.LONGEST:
+        return streaks.stream().mapToInt(Integer::intValue).max().orElse(0);
+      case StatType.CURRENT:
+          if (ss.endsWith("1") || ss.endsWith("*"))
+            return streaks.getLast().intValue();
+          else
+            return 0;
+      case StatType.MEAN:
+        return streaks.stream().mapToDouble(Integer::intValue).average().orElse(0.);
+      case StatType.MEDIAN:
+        ArrayList<Integer> seriesForMedian = new ArrayList<>(streaks);
+        seriesForMedian.sort(null);
+        return 0.5* (
+                      seriesForMedian.get( (int)( (seriesForMedian.size()-0.99)/2) )
+                    + seriesForMedian.get( (int)( (seriesForMedian.size()+0.01)/2) )
+                    );
+      default:
+          return -1;
+    }
   }
 }

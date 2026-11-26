@@ -9,55 +9,6 @@ public class CountryStreak {
   static ArrayList<Double> timeLineSuccessRate = new ArrayList<Double>();
   static ArrayList<Integer> seriesOfStreaks = new ArrayList<Integer>();
 
-  static double getGuessingStats(StatType type)
-  {
-    //inferSeriesOfStreaks();
-    seriesOfStreaks = GuessingUtils.getStreaksFromSimpleString(guessesAsDumbString);
-    switch(type)
-    {
-      case StatType.LONGEST:
-        return seriesOfStreaks.stream().mapToInt(Integer::intValue).max().orElse(0);
-      case StatType.CURRENT:
-          if (guessesAsDumbString.endsWith("1") || guessesAsDumbString.endsWith("*"))
-            return seriesOfStreaks.getLast().intValue();
-          else
-            return 0;
-      case StatType.MEAN:
-        return seriesOfStreaks.stream().mapToDouble(Integer::intValue).average().orElse(0.);
-      case StatType.MEDIAN:
-        var seriesForMedian = new ArrayList<>(seriesOfStreaks);
-        seriesForMedian.sort(null);
-        return 0.5* (
-                      seriesForMedian.get( (int)( (seriesForMedian.size()-0.99)/2) )
-                    + seriesForMedian.get( (int)( (seriesForMedian.size()+0.01)/2) )
-                    );
-      default:
-          return -1;
-    }
-  }
-
-  static double successRateOfDumbString(String s)
-  {
-    int hits = 0;
-    for(int i=0;i<s.length();i++)
-      if ((s.charAt(i) == '1') || (s.charAt(i) == '*'))
-        hits ++;
-    return (double)hits / s.length();
-  }
-
-  static double successRateOfPartialString(String s, int start, int end)
-  {
-    return successRateOfDumbString(s.substring(start,end));
-  }
-  
-  static void inferPartialSuccessRates(int partialStreakLength)
-  {
-    timeLineSuccessRate.clear();
-    if ( partialStreakLength > 0  &&  partialStreakLength <= guessesAsDumbString.length() )
-      for(int i=0; i <= guessesAsDumbString.length() - partialStreakLength; i++ )
-        timeLineSuccessRate.add( successRateOfPartialString( guessesAsDumbString, i, i+partialStreakLength ));
-  }
-
   static void browseGuesses()
   {
     //placeholder for later
@@ -87,14 +38,18 @@ public class CountryStreak {
 
   static void showStatsSuccessRates()
   {
-    IO.print("Your overall success rate is: %.2f%% over %d guesses.%n%n".formatted(100*successRateOfDumbString(guessesAsDumbString),guessesAsDumbString.length()));
+    IO.print("Your overall success rate is: %.2f%% over %d guesses.%n%n"
+            .formatted(
+                       100*GuessingUtils.successRateOfSimpleString(guessesAsDumbString)
+                      ,guessesAsDumbString.length()));
     int choice = 0;
 
     do {
       IO.println("show partial success rate for series of how many guesses? (0 to exit)");
       choice = Integer.parseInt(IO.readln().trim());//orElse(0)
       if (choice > 0) {
-        inferPartialSuccessRates(choice);
+        //inferPartialSuccessRates(choice);
+        timeLineSuccessRate = GuessingUtils.getPartialSuccessRatesFromSimpleString(choice, guessesAsDumbString);
         IO.println("in chunks of " + choice + " guesses, your success rate developed as follows:");
         IO.println(timeLineSuccessRate.stream().map("%.2f"::formatted).toList());
       }
@@ -107,10 +62,10 @@ public class CountryStreak {
     //inferSeriesOfStreaks();
     seriesOfStreaks = GuessingUtils.getStreaksFromSimpleString(guessesAsDumbString);
     IO.println("you had the following streaks:\n"+seriesOfStreaks);
-    IO.println("your longest streak was: %d%n".formatted((int)getGuessingStats(StatType.LONGEST)));
-    IO.println("your streak average was: %.2f%n".formatted(getGuessingStats(StatType.MEAN)));
-    IO.println("your median streak was: " + getGuessingStats(StatType.MEDIAN));
-    IO.println("your current streak is at: " + (int)getGuessingStats(StatType.CURRENT));
+    IO.println("your longest streak was: %d%n".formatted((int)GuessingUtils.getGuessingStatsFromSimpleString(StatType.LONGEST, guessesAsDumbString)));
+    IO.println("your streak average was: %.2f%n".formatted(GuessingUtils.getGuessingStatsFromSimpleString(StatType.MEAN, guessesAsDumbString)));
+    IO.println("your median streak was: " + GuessingUtils.getGuessingStatsFromSimpleString(StatType.MEDIAN, guessesAsDumbString));
+    IO.println("your current streak is at: " + (int)GuessingUtils.getGuessingStatsFromSimpleString(StatType.CURRENT, guessesAsDumbString));
   }
 
   public static void main(String[] args) {
@@ -145,7 +100,7 @@ public class CountryStreak {
 
     //testing for achievement
     Achievement testAchievement = null;
-    if(getGuessingStats(StatType.LONGEST) >= 4)
+    if(GuessingUtils.getGuessingStatsFromSimpleString(StatType.LONGEST, guessesAsDumbString) >= 4)
         testAchievement = new Achievement("4-in-a-row", "Test Player 1", 1, LocalDate.now(), "guessed the correct country 4 times in a row");
     //later, we can now check if the achievement has been unlocked
     if (testAchievement != null)
